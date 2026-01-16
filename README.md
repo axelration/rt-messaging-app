@@ -79,6 +79,13 @@ Development was time-boxed into two sprints to control scope and prioritise core
 
 ---
 
+## Sprint 1
+- Initial project setup, documentation and environment configuration.
+- Initial Backend.
+- Initial Frontend.
+
+---
+
 ## Documentation
 - SDLC details: `docs/sdlc.md`
 - Architecture diagram: `docs/architecture.png`
