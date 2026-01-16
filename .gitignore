@@ -1,8 +1,8 @@
 # Nestjs specific
-/dist
-/node_modules
-/build
-/tmp
+*/dist
+*/node_modules
+*/build
+*/tmp
 
 # Logs
 logs
@@ -22,6 +22,17 @@ lerna-debug.log*
 # temp directory
 .temp
 .tmp
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+*/generated/prisma
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
