@@ -65,7 +65,7 @@ export class AuthService {
 
     const token = this.jwtService.sign({ id: user.id, email: user.email });
 
-    return { access_token: token };
+    return { access_token: token, message: 'OK' };
   }
 
   async login(dto: LoginDto) {
@@ -106,6 +106,6 @@ export class AuthService {
 
     const token = this.jwtService.sign({ id: user.id, email: user.email });
 
-    return { access_token: token };
+    return { access_token: token, message: 'OK' };
   }
 }
