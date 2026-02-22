@@ -16,16 +16,16 @@ import { ConfigService } from '@nestjs/config';
 
 @WebSocketGateway({ cors: true })
 export class ChatGateway {
-  @SubscribeMessage('message')
-  handleMessage(client: any, payload: any): string {
-    return 'Hello world!';
-  }
-  /*
+  // @SubscribeMessage('message')
+  // handleMessage(client: any, payload: any): string {
+  //   return 'Hello world!';
+  // }
+
   @WebSocketServer()
   server: Server;
 
   constructor(
-    private jwt: JwtService,
+    private jwtService: JwtService,
     private config: ConfigService,
   ) {}
 
@@ -40,7 +40,7 @@ export class ChatGateway {
         return;
       }
 
-      const payload = this.jwt.verify(token, {
+      const payload = this.jwtService.verify(token, {
         secret: this.config.get('JWT_SECRET'),
       });
 
@@ -57,5 +57,4 @@ export class ChatGateway {
   handleDisconnect(client: Socket) {
     // cleanup if needed
   }
-  */
 }

@@ -1,6 +1,6 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
   moduleFormat = "cjs"
 }
 
@@ -11,43 +11,46 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  username  String    @unique
-  email     String    @unique
-  password  String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id            String               @id @default(uuid())
+  username      String               @unique
+  email         String               @unique
+  password      String
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime?
   conversations ConversationMember[]
-  messages  Message[]
+  messages      Message[]
+  isDeleted     String?              @default("0")
 }
 
 model Conversation {
-  id         Int       @id @default(autoincrement())
-  title      String?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  members    ConversationMember[]
-  messages   Message[]
+  id        String               @id @default(uuid())
+  title     String?
+  createdAt DateTime             @default(now())
+  updatedAt DateTime?
+  members   ConversationMember[]
+  messages  Message[]
+  isDeleted String?              @default("0")
 }
 
 model ConversationMember {
-  id             Int          @id @default(autoincrement())
+  id             String       @id @default(uuid())
+  userId         String       @unique
+  conversationId String       @unique
   user           User         @relation(fields: [userId], references: [id])
-  userId         Int
   conversation   Conversation @relation(fields: [conversationId], references: [id])
-  conversationId Int
-  joinedAt       DateTime     @default(now())
-
-  @@unique([userId, conversationId])
+  isDeleted      String?      @default("0")
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime?
 }
 
 model Message {
-  id             Int          @id @default(autoincrement())
+  id             String       @id @default(uuid())
   content        String
   sender         User         @relation(fields: [senderId], references: [id])
-  senderId       Int
+  senderId       String
   conversation   Conversation @relation(fields: [conversationId], references: [id])
-  conversationId Int
+  conversationId String
   createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  updatedAt      DateTime?
+  isDeleted      String?      @default("0")
 }
