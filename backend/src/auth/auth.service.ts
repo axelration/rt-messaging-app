@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -63,9 +64,11 @@ export class AuthService {
       },
     });
 
-    const token = this.jwtService.sign({ id: user.id, email: user.email });
+    const token = await this.generateToken(user.id, user.email);
 
-    return { access_token: token, message: 'OK' };
+    await this.storeRefreshToken(user.id, token.refreshToken);
+
+    return { access_token: token.accessToken, message: 'OK' };
   }
 
   async login(dto: LoginDto) {
@@ -104,8 +107,63 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const token = this.jwtService.sign({ id: user.id, email: user.email });
+    // Generate JWT token and refresh token
+    const token = await this.generateToken(user.id, user.email);
+
+    // Store the refresh token in the database (hashed)
+    await this.storeRefreshToken(user.id, token.refreshToken);
 
     return { access_token: token, message: 'OK' };
+  }
+
+  private async generateToken(userId: string, email: string) {
+    const payload = { id: userId, email };
+
+    const accessToken = this.jwtService.sign(payload, {
+      expiresIn: '15m',
+    });
+
+    const refreshToken = this.jwtService.sign(payload, {
+      expiresIn: '7d',
+    });
+
+    return { accessToken, refreshToken };
+  }
+
+  private async storeRefreshToken(userId: string, refreshToken: string) {
+    const hashedToken = await bcrypt.hash(refreshToken, 10);
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { refreshToken: hashedToken },
+    });
+  }
+
+  async refresh(refreshToken: string) {
+    try {
+      const payload = this.jwtService.verify(refreshToken);
+
+      const user = await this.prisma.user.findUnique({
+        where: { id: payload.id },
+      });
+
+      if (!user || !user.refreshToken) {
+        throw new UnauthorizedException('Invalid refresh token');
+      }
+
+      const isValid = await bcrypt.compare(refreshToken, user.refreshToken);
+
+      if (!isValid) {
+        throw new UnauthorizedException('Invalid refresh token');
+      }
+
+      const newToken = await this.generateToken(user.id, user.email);
+
+      await this.storeRefreshToken(user.id, newToken.refreshToken);
+
+      return { access_token: newToken.accessToken, message: 'OK' };
+    } catch (error) {
+      throw new UnauthorizedException(error.message);
+    }
   }
 }
