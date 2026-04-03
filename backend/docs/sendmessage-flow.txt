@@ -1,0 +1,19 @@
+Test Flow Scenario:
+1. User A + User B in conversation
+2. Both connected via WebSocket
+3. A sends message
+
+Expected:
+
+DB -> message saved
+A receives message
+B receives message instantly
+
+Event Structure (Front End):
+{
+  "id": "msg-id",
+  "content": "Hello",
+  "senderId": "user-id",
+  "conversationId": "conv-id",
+  "createdAt": "..."
+}

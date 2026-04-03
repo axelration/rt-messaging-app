@@ -13,23 +13,21 @@ import {
 import { Server, Socket } from 'socket.io';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-
+import { PrismaService } from 'src/prisma/prisma.service';
+import { ChatService } from './chat.service';
 @WebSocketGateway({ cors: true })
 export class ChatGateway {
-  // @SubscribeMessage('message')
-  // handleMessage(client: any, payload: any): string {
-  //   return 'Hello world!';
-  // }
-
   @WebSocketServer()
   server: Server;
 
   constructor(
     private jwtService: JwtService,
     private config: ConfigService,
+    private prisma: PrismaService,
+    private chatService: ChatService,
   ) {}
 
-  handleConnection(client: Socket) {
+  async handleConnection(client: any) {
     try {
       const token =
         client.handshake.auth?.token ||
@@ -49,12 +47,50 @@ export class ChatGateway {
         userId: payload.sub,
         email: payload.email,
       };
+
+      // Join coversation rooms based on user ID or other criteria
+      const conversations = await this.prisma.conversationMember.findMany({
+        where: {
+          userId: payload.sub,
+          isDeleted: '0',
+        },
+      });
+
+      conversations.forEach((conv) => {
+        client.join(`conversation_${conv.conversationId}`);
+      });
     } catch {
       client.disconnect();
     }
   }
 
-  handleDisconnect(client: Socket) {
+  @SubscribeMessage('sendMessage')
+  async handleSendMessage(client: any, payload: any) {
+    try {
+      const user = client.data.user;
+
+      // validate payload
+      const message = await this.chatService.sendMessage(
+        user.userId,
+        payload.conversationId,
+        payload.content,
+      );
+
+      if (message) {
+        this.server
+          .to(`conversation_${payload.conversationId}`)
+          .emit('newMessage', {
+            conversationId: payload.conversationId,
+            message,
+          });
+      }
+    } catch (error) {
+      // Handle error (e.g., log it)
+      console.error('Error handling sendMessage:', error);
+    }
+  }
+
+  handleDisconnect(client: any) {
     // cleanup if needed
   }
 }

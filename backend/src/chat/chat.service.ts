@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
@@ -96,7 +99,7 @@ export class ChatService {
   async getUserConversations(userId: string) {
     const response: { code: number; data: any; message: string } = {
       code: 200,
-      data: null,
+      data: [],
       message: 'OK',
     };
 
@@ -142,6 +145,151 @@ export class ChatService {
       response.code = 500;
       response.message = 'Error retrieving conversations: ' + error.message;
       return response;
+    }
+
+    return response;
+  }
+
+  async sendMessage(senderId: string, conversationId: string, content: string) {
+    const response: { code: number; data: any; message: string } = {
+      code: 201,
+      data: null,
+      message: 'Message is created successfully',
+    };
+
+    try {
+      // Check if the conversation exists and the sender is a member
+      const membership = await this.prisma.conversationMember.findFirst({
+        where: {
+          userId: senderId,
+          conversationId: conversationId,
+          isDeleted: '0',
+        },
+      });
+
+      if (!membership) {
+        response.code = 403;
+        response.message = 'You are not a member of this conversation';
+        return response;
+      }
+
+      // Check if the conversation is not deleted
+      const conversation = await this.prisma.conversation.findUnique({
+        where: { id: conversationId },
+        select: { isDeleted: true },
+      });
+
+      if (conversation?.isDeleted === '1') {
+        response.code = 403;
+        response.message = 'This conversation has been deleted';
+        return response;
+      }
+
+      // Filter the content for SQL Injection and XSS attacks
+      const sanitizedContent = content
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/'/g, '&#39;')
+        .replace(/"/g, '&quot;');
+
+      // Create the message
+      const message = await this.prisma.message.create({
+        data: {
+          conversationId,
+          senderId,
+          content: sanitizedContent,
+        },
+      });
+    } catch (error) {
+      response.code = 500;
+      response.message = 'Error sending message: ' + error.message;
+    }
+
+    return response;
+  }
+
+  async getMessages(
+    userId: string,
+    conversationId: string,
+    limit: number = 20,
+    offset: number = 0,
+    cursor?: string,
+  ) {
+    const response: {
+      code: number;
+      data: any;
+      message: string;
+      nextCursor: any;
+    } = {
+      code: 200,
+      data: [],
+      message: 'OK',
+      nextCursor: null,
+    };
+
+    try {
+      // Check if the user is a member of the conversation
+      const membership = await this.prisma.conversationMember.findFirst({
+        where: {
+          userId,
+          conversationId,
+          isDeleted: '0',
+        },
+      });
+
+      if (!membership) {
+        response.code = 403;
+        response.message = 'You are not a member of this conversation';
+        return response;
+      }
+
+      // Check if the conversation is not deleted
+      const conversation = await this.prisma.conversation.findUnique({
+        where: { id: conversationId },
+        select: { isDeleted: true },
+      });
+
+      if (conversation?.isDeleted === '1') {
+        response.code = 403;
+        response.message = 'This conversation has been deleted';
+        return response;
+      }
+
+      // limit maximum to 50
+      limit = Math.min(limit, 50);
+
+      // Retrieve messages for the conversation
+      const messages = await this.prisma.message.findMany({
+        where: {
+          conversationId,
+          isDeleted: '0',
+        },
+        include: {
+          sender: {
+            select: {
+              id: true,
+              email: true,
+            },
+          },
+        },
+        orderBy: { createdAt: 'desc' }, // Return messages in descending order (newest first)
+        take: limit,
+        skip: offset,
+        ...(cursor && {
+          cursor: { id: cursor },
+          skip: 1, // Skip the cursor message itself
+        }),
+      });
+
+      const ordered = messages.reverse(); // Reverse to return messages in ascending order (oldest first)
+      const nextCursor =
+        messages.length === limit ? messages[messages.length - 1].id : null;
+
+      response.data = ordered;
+      response.nextCursor = nextCursor;
+    } catch (error) {
+      response.code = 500;
+      response.message = 'Error retrieving messages: ' + error.message;
     }
 
     return response;
