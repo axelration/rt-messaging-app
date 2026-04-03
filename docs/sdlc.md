@@ -46,6 +46,12 @@ Development was divided into two sprints.
 - UX enhancements (typing indicator, presence)
 - Application deployment
 
+### Upcoming Sprints - Project Continuations
+This app development is entirely done in freetime outside of real-world business and entirely made with passion
+and to remind myself to maintain self-discipline even in solo projects, the additional sprints is needed
+to keep backlog chores done meanwhile the progress still the same in the original plan with delayed schedule.
+Nevertheless the schedule will keep updated in Jira and the steps made is intended following the original plan. 
+
 ---
 
 ## Phase 4: Testing

@@ -4,6 +4,10 @@
 */build
 */tmp
 
+# Next.js specific
+.next
+out
+
 # Logs
 logs
 *.log

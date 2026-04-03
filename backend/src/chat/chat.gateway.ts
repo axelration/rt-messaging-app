@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
@@ -6,8 +7,6 @@
 import {
   WebSocketGateway,
   WebSocketServer,
-  OnGatewayConnection,
-  OnGatewayDisconnect,
   SubscribeMessage,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
@@ -88,6 +87,15 @@ export class ChatGateway {
       // Handle error (e.g., log it)
       console.error('Error handling sendMessage:', error);
     }
+  }
+
+  @SubscribeMessage('typing')
+  async handleTyping(client: any, payload: any) {
+    const user = client.data.user;
+
+    client.to(`conversation-${payload.conversationId}`).emit('typing', {
+      userId: user.userId,
+    });
   }
 
   handleDisconnect(client: any) {

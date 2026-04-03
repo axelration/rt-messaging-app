@@ -69,7 +69,7 @@ export class AuthService {
 
     await this.storeRefreshToken(user.id, token.refreshToken);
 
-    return { access_token: token.accessToken, message: 'OK' };
+    return { accessToken: token.accessToken, message: 'OK' };
   }
 
   async login(dto: LoginDto) {
@@ -114,7 +114,11 @@ export class AuthService {
     // Store the refresh token in the database (hashed)
     await this.storeRefreshToken(user.id, token.refreshToken);
 
-    return { access_token: token, message: 'OK' };
+    return {
+      accessToken: token.accessToken,
+      refreshToken: token.refreshToken,
+      message: 'OK',
+    };
   }
 
   private async generateToken(userId: string, email: string) {
@@ -136,7 +140,7 @@ export class AuthService {
 
     await this.prisma.user.update({
       where: { id: userId },
-      data: { refreshToken: hashedToken },
+      data: { refreshToken: hashedToken, updatedAt: new Date() },
     });
   }
 
@@ -163,9 +167,20 @@ export class AuthService {
       await this.storeRefreshToken(user.id, newToken.refreshToken);
 
       return { access_token: newToken.accessToken, message: 'OK' };
-    } catch (error) {
-      throw new UnauthorizedException(error.message);
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : 'Invalid refresh token';
+      throw new UnauthorizedException(message || 'Invalid refresh token');
     }
+  }
+
+  async logout(userId: string) {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { refreshToken: null, updatedAt: new Date() },
+    });
+
+    return { message: 'Logged out successfully' };
   }
 
   // Password hashing utility (for testing purposes)

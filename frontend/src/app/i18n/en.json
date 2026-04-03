@@ -1,0 +1,12 @@
+{
+  "login_title": "Sign In",
+  "email": "Email",
+  "password": "Password",
+  "login_button": "Sign In",
+  "login_error": "Invalid email or password",
+  "login_success": "Login successful",
+  "login_placeholder_email": "Enter your email",
+  "login_placeholder_password": "Enter your password",
+  "send": "Send",
+  "someone_is_typing": "Someone is typing..."
+}

@@ -1,0 +1,12 @@
+{
+  "login_title": "Masuk",
+  "email": "Alamat Email",
+  "password": "Kata Sandi",
+  "login_button": "Masuk",
+  "login_error": "Alamat email atau kata sandi tidak valid",
+  "login_success": "Login berhasil",
+  "login_placeholder_email": "Masukkan alamat email Anda",
+  "login_placeholder_password": "Masukkan kata sandi Anda",
+  "send": "Kirim",
+  "someone_is_typing": "Seseorang sedang mengetik..."
+}
