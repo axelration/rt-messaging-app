@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
@@ -30,5 +31,12 @@ export class AuthController {
   @Post('refresh')
   async refresh(@Body() dto: { refresh_token: string }) {
     return this.authService.refresh(dto.refresh_token);
+  }
+
+  // Password hash testing endpoint (for development only)
+  @Post('hash-password')
+  async hashPassword(@Body() dto: { password: string }) {
+    const hashedPassword = await this.authService.hashPassword(dto.password);
+    return { hashedPassword };
   }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -165,5 +166,10 @@ export class AuthService {
     } catch (error) {
       throw new UnauthorizedException(error.message);
     }
+  }
+
+  // Password hashing utility (for testing purposes)
+  async hashPassword(password: string) {
+    return await bcrypt.hash(password, 10);
   }
 }
