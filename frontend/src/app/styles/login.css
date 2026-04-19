@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+#email, #password {
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  letter-spacing: 0.05rem;
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+    display: none;
+}
+
+input:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.25);
+  transition: box-shadow 500ms ease-out;
+}
+
+input:not(:focus) {
+  box-shadow: none;
+  transition: box-shadow 500ms ease-out;
+}
+
+button#login-button {
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  letter-spacing: 0.05rem;
+  background-color: #0c77da;
+}
+
+button#login-button:hover {
+  outline: none;
+  box-shadow: 0 0 0 10px rgba(0, 55, 255, 0.25);
+  transition: box-shadow 500ms ease-out;
+}
+
+button#login-button:not(:hover) {
+  box-shadow: none;
+  transition: box-shadow 1000ms ease-out;
+}

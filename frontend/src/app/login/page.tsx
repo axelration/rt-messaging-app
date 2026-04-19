@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 'use client';
-
+import '../styles/login.css';
 import { useState } from "react";
 import { usei18n } from "../hooks/language";
 import { apiFetch } from "../lib/api";
 import { setAuthState } from "../store/auth.store";
 import { connectSocket } from "../lib/socket";
 import Button from "../components/ui/Button";
-import Input from "../components/ui/Input";
+import LoginInput from "../components/ui/LoginInput";
 import ThemeToggle from "../components/theme/ThemeToggle";
 import LanguageToggle from "../components/ui/LanguageToggle";
 
@@ -20,7 +20,7 @@ export default function LoginPage() {
 
   async function handleLogin() {
     try {
-      const res = await apiFetch('/auth/login', {
+      await apiFetch('/auth/login', {
         method: 'POST',
         body: JSON.stringify({ email, password }),
       }).then((res) => {
@@ -29,7 +29,7 @@ export default function LoginPage() {
         // Store access token in cookie for Socket.IO authentication and route protection
         document.cookie = `accessToken=${res.accessToken}; path=/`;
         document.cookie = `refreshToken=${res.refreshToken}; path=/`;
-  
+
         connectSocket(res.accessToken);
       }).finally(() => window.location.href = '/chat');
     } catch (err) {
@@ -39,35 +39,43 @@ export default function LoginPage() {
   }
 
   return (
+    // Fullscreen centered container with light/dark background
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+      {/* Login form container with white/dark background, padding, rounded corners, and shadow */}
       <div className="p-6 bg-white dark:bg-gray-800 rounded shadow w-80">
-        
-        <div className="flex justify-end">
-          <ThemeToggle />
-          <LanguageToggle />
-        </div>
-
-        <h1 className="text-xl mb-4 text-center dark:text-white">
+        {/* Header with title */}
+        <h1 className="text-2xl mb-4 text-center dark:text-white">
           {t.login_title}
         </h1>
 
-        <Input
+        <LoginInput
+          id="email"
           placeholder={t.login_placeholder_email}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <Input
-          type="password"
+        <LoginInput
+          id="password"
           placeholder={t.login_placeholder_password}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <div className="mt-4">
-          <Button onClick={handleLogin}>
+        <div className="mt-4 flex items-center justify-center">
+          <Button id="login-button" onClick={handleLogin}>
             {t.login_button}
           </Button>
+        </div>
+        <button
+          className="mt-4 text-sm text-blue-500 hover:underline"
+          onClick={() => window.location.href = '/register'}
+        >
+          {t.login_no_account}
+        </button>
+        <div className="mt-2 flex items-center justify-center space-x-2">
+          <LanguageToggle />
+          <ThemeToggle />
         </div>
 
       </div>

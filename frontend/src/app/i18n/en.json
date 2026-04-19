@@ -1,5 +1,6 @@
 {
-  "login_title": "Sign In",
+  "login_title": "Welcome",
+  "login_subtitle": "Please sign in to continue",
   "email": "Email",
   "password": "Password",
   "login_button": "Sign In",
@@ -8,5 +9,8 @@
   "login_placeholder_email": "Enter your email",
   "login_placeholder_password": "Enter your password",
   "send": "Send",
-  "someone_is_typing": "Someone is typing..."
+  "someone_is_typing": "Someone is typing...",
+  "login_no_account": "Don't have an account? Sign Up",
+  "toggle_theme": "Toggle Theme",
+  "toggle_language": "Toggle Language"
 }
