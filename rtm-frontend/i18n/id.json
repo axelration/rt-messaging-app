@@ -1,16 +1,21 @@
 {
-  "login_title": "Selamat Datang",
-  "login_subtitle": "Silakan masuk untuk melanjutkan",
+  "login_title": "Masuk ke akun Anda",
+  "login_subtitle": "Masukkan email Anda di bawah untuk masuk ke akun Anda",
   "email": "Alamat Email",
   "password": "Kata Sandi",
   "login_button": "Masuk",
+  "login_with_google": "Masuk dengan Google",
+  "error": "Error",
   "login_error": "Alamat email atau kata sandi tidak valid",
   "login_success": "Login berhasil",
   "login_placeholder_email": "Masukkan alamat email Anda",
   "login_placeholder_password": "Masukkan kata sandi Anda",
+  "forgot_password": "Lupa kata sandi?",
   "send": "Kirim",
   "someone_is_typing": "Seseorang sedang mengetik...",
-  "login_no_account": "Belum punya akun? Daftar",
+  "login_no_account": "Belum punya akun?",
+  "sign_up": "Daftar",
   "toggle_theme": "Ubah Tema",
-  "toggle_language": "Ubah Bahasa"
+  "toggle_language": "Ubah Bahasa",
+  "something_went_wrong": "Terjadi kesalahan. Silakan coba lagi."
 }

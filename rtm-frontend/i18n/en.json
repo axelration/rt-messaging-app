@@ -1,16 +1,21 @@
 {
-  "login_title": "Welcome",
-  "login_subtitle": "Please sign in to continue",
+  "login_title": "Login to your account",
+  "login_subtitle": "Enter your email below to login to your account",
   "email": "Email",
   "password": "Password",
-  "login_button": "Sign In",
+  "login_button": "Login",
+  "login_with_google": "Login with Google",
+  "error": "Error",
   "login_error": "Invalid email or password",
   "login_success": "Login successful",
   "login_placeholder_email": "Enter your email",
   "login_placeholder_password": "Enter your password",
+  "forgot_password": "Forgot your password?",
   "send": "Send",
   "someone_is_typing": "Someone is typing...",
-  "login_no_account": "Don't have an account? Sign Up",
+  "login_no_account": "Don't have an account?",
+  "sign_up": "Sign up",
   "toggle_theme": "Toggle Theme",
-  "toggle_language": "Toggle Language"
+  "toggle_language": "Toggle Language",
+  "something_went_wrong": "Something went wrong. Please try again."
 }

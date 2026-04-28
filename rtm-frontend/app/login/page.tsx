@@ -5,6 +5,8 @@ import { usei18n } from "@/hooks/language";
 import { apiFetch } from "@/lib/api";
 import { setAuthState } from "@/store/auth.store";
 import { connectSocket } from "@/lib/socket";
+import { LoginForm } from "@/components/login-form";
+import { GlobalAlert } from "@/components/alert";
 
 export default function LoginPage() {
   const { t } = usei18n();
@@ -35,14 +37,11 @@ export default function LoginPage() {
 
   return (
     // Fullscreen centered container with light/dark background
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10 bg-gray-100 dark:bg-gray-900">
       {/* Login form container with white/dark background, padding, rounded corners, and shadow */}
-      <div className="p-6 bg-white dark:bg-gray-800 rounded shadow w-80">
-        {/* Header with title */}
-        <h1 className="text-2xl mb-4 text-center dark:text-white">
-          {t.login_title}
-        </h1>
-
+      <div className="w-full max-w-sm">
+        <LoginForm />
+        <GlobalAlert />
       </div>
     </div>
   );
