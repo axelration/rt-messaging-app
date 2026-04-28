@@ -41,7 +41,7 @@ export function LoginForm({
         body: JSON.stringify({ email, password }),
       }).then((res) => {
         if (!res || res.statusCode !== 201) {
-          return triggerAlert(t.error, t.login_error, 'default');
+          return triggerAlert(t.error, t.something_went_wrong, 'default');
         }
         setAuthState(res);
 
