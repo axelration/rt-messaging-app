@@ -19,6 +19,7 @@ export async function apiFetch(
 
   if (!res.ok) {
     const errorData = await res.json();
+    console.log('API error:', errorData);
     // If unauthorized, attempt to refresh the token
     // if (errorData.statusCode === 401) {
     //   // Attempt to refresh the token one time

@@ -4,7 +4,7 @@ import { usei18n } from "@/hooks/language";
 import { apiFetch } from "@/lib/api";
 import { setAuthState } from "@/store/auth.store";
 import { connectSocket } from "@/lib/socket";
-import { cn } from "@/lib/utils"
+import { cn, isEmailValid } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -28,6 +28,7 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [invalidForm, setInvalidForm] = useState(false);
   const triggerAlert = useAlertStore((state) => state.setAlert);
 
   // Language module
@@ -58,6 +59,14 @@ export function LoginForm({
     }
   }
 
+  // Enter key submits the form
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === 'Enter' && isEmailValid(email) && password.length > 0) {
+      e.preventDefault();
+      handleLogin();
+    }
+  }
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -69,46 +78,46 @@ export function LoginForm({
         </CardHeader>
         <CardContent>
           {/* <form> */}
-            <FieldGroup>
-              <Field>
-                <FieldLabel htmlFor="email">{t.email}</FieldLabel>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </Field>
-              <Field>
-                <div className="flex items-center">
-                  <FieldLabel htmlFor="password">{t.password}</FieldLabel>
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    {t.forgot_password}
-                  </a>
-                </div>
-                <Input
+          <FieldGroup>
+            <Field>
+              <FieldLabel htmlFor="email">{t.email}</FieldLabel>
+              <Input
+                id="email"
+                type="email"
+                placeholder="m@example.com"
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                onKeyDown={handleKeyDown}
+              />
+            </Field>
+            <Field>
+              <div className="flex items-center">
+                <FieldLabel htmlFor="password">{t.password}</FieldLabel>
+                <a
+                  href="/forgot-password"
+                  className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                >
+                  {t.forgot_password}
+                </a>
+              </div>
+              <Input
                 id="password"
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
-                required />
-              </Field>
-              <Field>
-                <Button onClick={() => handleLogin()}>{t.login_button}</Button>
-                {/* <Button variant="outline" type="button">
-                  {t.login_with_google}
-                </Button> */}
-                <FieldDescription className="text-center">
-                  {t.login_no_account}{' '}
-                  <a href="#" className="underline hover:text-primary">
-                    {t.sign_up}
-                  </a>
-                </FieldDescription>
-              </Field>
-            </FieldGroup>
+                required
+                onKeyDown={handleKeyDown}
+              />
+            </Field>
+            <Field>
+              <Button onClick={() => handleLogin()}>{t.login_button}</Button>
+            </Field>
+            <FieldDescription className="text-center">
+              {t.login_no_account}{' '}
+              <a href="/register" className="underline hover:text-primary">
+                {t.sign_up}
+              </a>
+            </FieldDescription>
+          </FieldGroup>
           {/* </form> */}
         </CardContent>
       </Card>

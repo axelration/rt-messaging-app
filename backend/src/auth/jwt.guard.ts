@@ -21,6 +21,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         throw new UnauthorizedException({
           statusCode: 401,
           message: 'Authentication token expired',
+          errorCode: 'TOKEN_EXPIRED',
           error: 'Unauthorized',
         });
       }
@@ -29,6 +30,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         throw new UnauthorizedException({
           statusCode: 401,
           message: 'Authentication token required',
+          errorCode: 'TOKEN_REQUIRED',
           error: 'Unauthorized',
         });
       }
@@ -36,6 +38,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       throw new UnauthorizedException({
         statusCode: 401,
         message: 'Invalid authentication token',
+        errorCode: 'TOKEN_INVALID',
         error: 'Unauthorized',
       });
     }

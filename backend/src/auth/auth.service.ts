@@ -183,6 +183,27 @@ export class AuthService {
     return { message: 'Logged out successfully' };
   }
 
+  // Forgot password endpoint (for development only)
+  async forgotPassword(email: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+    });
+
+    let sendEmail = true;
+
+    if (!user) {
+      sendEmail = false; // Don't reveal if email exists
+    }
+
+    // In a real application, you would send an email with a reset link here
+    if (sendEmail) {
+      // Simulate sending email by logging to console
+      console.log(`Sending password reset email to ${email}`);
+    }
+
+    return { message: `Password reset link has been sent to ${email}` };
+  }
+
   // Password hashing utility (for testing purposes)
   async hashPassword(password: string) {
     return await bcrypt.hash(password, 10);

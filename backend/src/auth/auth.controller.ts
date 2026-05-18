@@ -42,6 +42,12 @@ export class AuthController {
     return this.authService.logout(req.user.userId);
   }
 
+  // Forgot password endpoint (for development only)
+  @Post('forgot-password')
+  async forgotPassword(@Body() dto: { email: string }) {
+    return this.authService.forgotPassword(dto.email);
+  }
+
   // Password hash testing endpoint (for development only)
   @Post('hash-password')
   async hashPassword(@Body() dto: { password: string }) {

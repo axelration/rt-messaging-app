@@ -1,15 +1,14 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 'use client';
-import { LoginForm } from "@/components/login-form";
+import { RegisterForm } from "@/components/register-form";
 import { GlobalAlert } from "@/components/alert";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   return (
     // Fullscreen centered container with light/dark background
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10 bg-gray-300 dark:bg-gray-900">
-      {/* Login form container with white/dark background, padding, rounded corners, and shadow */}
       <div className="w-full max-w-sm">
-        <LoginForm />
+        <RegisterForm />
         <GlobalAlert />
       </div>
     </div>
