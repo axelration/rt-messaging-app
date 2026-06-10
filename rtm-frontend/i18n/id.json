@@ -49,5 +49,7 @@
   "password_requirement_uppercase": "Kata sandi harus mengandung setidaknya satu huruf besar",
   "password_requirement_number": "Kata sandi harus mengandung setidaknya satu angka",
   "password_requirement_special": "Kata sandi harus mengandung setidaknya satu karakter khusus",
-  "invalid_email_format": "Silakan masukkan alamat email yang valid"
+  "invalid_email_format": "Silakan masukkan alamat email yang valid",
+  "no_messages": "Belum ada pesan",
+  "typing": "Seseorang sedang mengetik"
 }

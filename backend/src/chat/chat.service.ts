@@ -90,7 +90,9 @@ export class ChatService {
       });
     } catch (error) {
       response.code = 500;
-      response.message = 'Error creating conversation: ' + error.message;
+      response.message =
+        'Error creating conversation: ' +
+        (error instanceof Error ? error.message : String(error));
     }
 
     return response;
@@ -143,7 +145,9 @@ export class ChatService {
       }));
     } catch (error) {
       response.code = 500;
-      response.message = 'Error retrieving conversations: ' + error.message;
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      response.message = 'Error retrieving conversations: ' + errorMessage;
       return response;
     }
 
@@ -202,7 +206,9 @@ export class ChatService {
       });
     } catch (error) {
       response.code = 500;
-      response.message = 'Error sending message: ' + error.message;
+      response.message =
+        'Error sending message: ' +
+        (error instanceof Error ? error.message : String(error));
     }
 
     return response;
@@ -289,7 +295,9 @@ export class ChatService {
       response.nextCursor = nextCursor;
     } catch (error) {
       response.code = 500;
-      response.message = 'Error retrieving messages: ' + error.message;
+      response.message =
+        'Error retrieving messages: ' +
+        (error instanceof Error ? error.message : String(error));
     }
 
     return response;

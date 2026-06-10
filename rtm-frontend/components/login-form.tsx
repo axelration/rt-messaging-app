@@ -41,7 +41,7 @@ export function LoginForm({
         method: 'POST',
         body: JSON.stringify({ email, password }),
       }).then((res) => {
-        if (!res || res.statusCode !== 201) {
+        if (!res || res.message !== 'OK') {
           return triggerAlert(t.error, t.something_went_wrong, 'default');
         }
         setAuthState(res);

@@ -49,5 +49,7 @@
   "password_requirement_uppercase": "Contain at least one uppercase letter",
   "password_requirement_number": "Contain at least one number",
   "password_requirement_special": "Contain at least one special character",
-  "invalid_email_format": "Please enter a valid email address"
+  "invalid_email_format": "Please enter a valid email address",
+  "no_messages": "No messages yet",
+  "typing": "Someone is typing"
 }

@@ -21,18 +21,46 @@ async function main() {
     return;
   }
 
-  const hashedPassword = await bcrypt.hash(adminPassword, 10);
-
   const admin = await prisma.user.create({
     data: {
       email: adminEmail,
-      password: hashedPassword,
+      password: await bcrypt.hash(adminPassword, 10),
       username: 'Admin',
       role: 'admin',
     },
   });
 
   console.log('Admin user created:', admin);
+  await createSampleConversations(admin.id);
+}
+
+async function createSampleConversations(adminId: string) {
+  const user1 = await prisma.user.create({
+    data: {
+      email: 'user1@mail.com',
+      password: await bcrypt.hash('User123', 10),
+      username: 'Sample User',
+      role: 'user',
+    },
+  });
+
+  // Create a sample conversation between the admin and the demo user
+  const conv = await prisma.conversation.create({
+    data: {
+      participants: {
+        connect: [{ id: adminId }, { id: user1.id }],
+      },
+    },
+  });
+
+  // User 1 send sample message to the conversation
+  await prisma.message.create({
+    data: {
+      content: 'Hello! This is a sample conversation.',
+      senderId: user1.id,
+      conversationId: conv.id,
+    },
+  });
 }
 
 main()
