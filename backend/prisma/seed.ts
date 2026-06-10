@@ -47,8 +47,8 @@ async function createSampleConversations(adminId: string) {
   // Create a sample conversation between the admin and the demo user
   const conv = await prisma.conversation.create({
     data: {
-      participants: {
-        connect: [{ id: adminId }, { id: user1.id }],
+      members: {
+        create: [{ userId: adminId }, { userId: user1.id }],
       },
     },
   });

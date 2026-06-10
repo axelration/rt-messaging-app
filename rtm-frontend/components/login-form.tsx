@@ -52,7 +52,7 @@ export function LoginForm({
 
         connectSocket(res.accessToken);
       })
-      // .finally(() => window.location.href = '/chat');
+      .finally(() => window.location.href = '/chat');
     } catch (err) {
       console.log('error', err);
       triggerAlert(t.error, t.login_error, 'default');

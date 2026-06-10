@@ -12,6 +12,7 @@ export function setAuthState(tokens: AuthState) {
   authState = tokens;
   localStorage.setItem('accessToken', tokens.accessToken || '');
   localStorage.setItem('refreshToken', tokens.refreshToken || '');
+  localStorage.setItem('userId', tokens.accessToken ? JSON.parse(atob(tokens.accessToken.split('.')[1])).sub : '');
 }
 
 export function getAuthState(): AuthState {
@@ -33,4 +34,5 @@ export function clearAuthState() {
   };
   localStorage.removeItem('accessToken');
   localStorage.removeItem('refreshToken');
+  localStorage.removeItem('userId');
 }
