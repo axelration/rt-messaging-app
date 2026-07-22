@@ -14,6 +14,7 @@ import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { validate } from 'class-validator';
+import generateUnique from 'src/common/utils/unique-code.util';
 
 @Injectable()
 export class AuthService {
@@ -56,12 +57,14 @@ export class AuthService {
     }
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
+    const uniqueCode = await this.generateUniqueCode();
 
     const user = await this.prisma.user.create({
       data: {
         email: dto.email,
         username: dto.username,
         password: hashedPassword,
+        uniqueCode,
       },
     });
 
@@ -70,6 +73,25 @@ export class AuthService {
     await this.storeRefreshToken(user.id, token.refreshToken);
 
     return { accessToken: token.accessToken, message: 'OK' };
+  }
+
+  // Create unique code for the user, ensuring it doesn't already exist in the database
+  private async generateUniqueCode(): Promise<string> {
+    let uniqueCode: string = generateUnique();
+    let isUnique = false;
+
+    while (!isUnique) {
+      const existingCode = await this.prisma.user.findUnique({
+        where: { uniqueCode },
+      });
+      if (!existingCode) {
+        isUnique = true;
+      } else {
+        uniqueCode = generateUnique();
+      }
+    }
+
+    return uniqueCode;
   }
 
   async login(dto: LoginDto) {

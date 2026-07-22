@@ -55,6 +55,8 @@ export default function ChatSidebar({ activeConversationId, onSelect }: Props) {
     <div className="flex flex-col h-full">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-800 shrink-0">
+        {/* TODO i18n */}
+        {/* TODO Add dropdown for account details and logout */}
         <h1 className="text-lg font-bold text-gray-800 dark:text-gray-100 tracking-tight">
           Messages
         </h1>

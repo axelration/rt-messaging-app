@@ -25,3 +25,15 @@ export async function logout() {
   // redirect to login page
   window.location.href = '/login';
 }
+
+export async function getUserDetail() {
+  try {
+    const res = await apiFetch('/auth/user/userdetail', {
+      method: 'POST',
+    });
+    return res;
+  } catch (error) {
+    console.error('Failed to fetch user detail:', error);
+    throw error;
+  }
+}

@@ -8,6 +8,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { PrismaService } from './prisma/prisma.service';
 import { JwtGlobalModule } from './auth/jwt-global.module';
 import { ChatModule } from './chat/chat.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ChatModule } from './chat/chat.module';
     AuthModule,
     JwtGlobalModule,
     ChatModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService, ChatGateway, PrismaService],
